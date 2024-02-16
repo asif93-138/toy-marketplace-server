@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
+const testL = require('./testData.json');
 const port = process.env.PORT || 3000;
 
 app.use(cors());
@@ -32,20 +33,6 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
-    app.get('/mytoys/:id', async(req, res) => {
-      const id = req.params.id;
-      console.log('Toy', id);
-      const query = { name: id };
-      const result = await database.find(query).toArray();
-      res.send(result);
-    })
-    app.get('/toys/:id', async(req, res) => {
-      const id = req.params.id;
-      console.log('Toy', id);
-      const query = { _id: new ObjectId(id) };
-      const result = await database.findOne(query);
-      res.send(result);
-    })
     app.post('/toys', async(req, res) => {
       const toy = req.body;
       console.log('Toy', toy);
@@ -67,19 +54,13 @@ async function run() {
       const options = { upsert: true };
       const updateToy = {
         $set: {
-          toyName: toy.toyName, price: toy.price
+          photoURL: toy.photoURL, quantity: toy.quantity, price: toy.price, ratings: toy.ratings, details: toy.details
         },
       };
       const result = await database.updateOne(filter, updateToy, options);
       res.send(result);
     })
-    app.get('/search/:id', async(req, res) => {
-      const id = req.params.id;
-      console.log('Search', id);
-      const query = { toyName: id };
-      const result = await database.find(query).toArray();
-      res.send(result);
-    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -93,6 +74,10 @@ run().catch(console.dir);
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
+})
+
+app.get('/test', async(req, res) => {
+  res.send(testL);
 })
 
 app.listen(port, () => {
