@@ -35,7 +35,6 @@ async function run() {
     })
     app.post('/toys', async(req, res) => {
       const toy = req.body;
-      console.log('Toy', toy);
       const result = await database.insertOne(toy);
       res.send(result);
     })
@@ -54,7 +53,7 @@ async function run() {
       const options = { upsert: true };
       const updateToy = {
         $set: {
-          photoURL: toy.photoURL, quantity: toy.quantity, price: toy.price, ratings: toy.ratings, details: toy.details
+          quantity: toy.quantity, price: toy.price, details: toy.details
         },
       };
       const result = await database.updateOne(filter, updateToy, options);
