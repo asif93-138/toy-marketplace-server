@@ -29,16 +29,19 @@ async function run() {
     await client.connect();
     const database = client.db("toyDB").collection("initialTest");
     app.get('/toys', async(req, res) => {
+
       const cursor = database.find();
       const result = await cursor.toArray();
       res.send(result);
     })
     app.post('/toys', async(req, res) => {
+
       const toy = req.body;
       const result = await database.insertOne(toy);
       res.send(result);
     })
     app.delete('/toys/:id', async(req, res) => {
+
       const id = req.params.id;
       console.log('Toy', id);
       const query = { _id: new ObjectId(id) };
@@ -46,6 +49,7 @@ async function run() {
       res.send(result);
     })
     app.put('/toys/:id', async(req, res) => {
+
       const id = req.params.id;
       const toy = req.body;
       console.log('Toy', id, toy);
@@ -72,10 +76,12 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
+
   res.send('Hello World!')
 })
 
 app.get('/test', async(req, res) => {
+
   res.send(testL);
 })
 
